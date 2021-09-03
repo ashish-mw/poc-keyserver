@@ -80,7 +80,7 @@ This is similar to our system generating a JWT for user session.
 $ curl --location --request POST 'http://localhost:9090/auth' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "email": "ashish@mindwaveventures.com"
+    "email": "devs@mindwaveventures.com"
 }'
 ```
 
