@@ -86,7 +86,7 @@ const createAuthorizationToken = async (req, res, next) => {
 
 const signatureVerified = (req, res, next) => {
   return res.json({
-    message: 'All good! Singature verified with body payload',
+    message: 'All good! Signature verified with body payload',
     user: req.user.uuid,
     token: req.user.auth_token
   })

@@ -53,6 +53,10 @@ const checkSignature = async (req, res, next) => {
       });
     }
 
+    nowDate.setHours(nowDate.getHours() + 1); // adds 1 hr
+    user.auth_token_expires_on = nowDate;
+    await user.save();
+
     req.user = {
       _id: user._id,
       uuid: user.uuid,
