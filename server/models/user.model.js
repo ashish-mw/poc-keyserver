@@ -14,6 +14,12 @@ const UserSchema = new mongoose.Schema(
     public_key: {
       type: String,
       required: true,
+    },
+    auth_token: {
+      type: String,
+    },
+    auth_token_expires_on: {
+      type: Date,
     }
   },
   {

@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { v4: uuid4 } = require("uuid");
 const UserModel = require('./models/user.model');
 
 const generateCertificates = async (req, res, next) => {
@@ -51,6 +52,48 @@ ${publicKey}`
   }
 }
 
+const createAuthorizationToken = async (req, res, next) => {
+  try {
+    const found = await UserModel.findOne({
+      email: req.body.email,
+    }, {
+      uuid: 1
+    });
+
+    if (!found) {
+      return next({
+        isClient: true,
+        is403: true,
+        message: `${req.body.email} is not registered`,
+      });
+    }
+
+    found.auth_token = uuid4();
+    const date = new Date();
+    date.setHours(date.getHours() + 1); // adds 1 hr
+    found.auth_token_expires_on = date;
+    await found.save()
+
+    return res.json({
+      data: {
+        token: found.auth_token
+      }
+    })
+  } catch (e) {
+    next(e);
+  }
+}
+
+const signatureVerified = (req, res, next) => {
+  return res.json({
+    message: 'All good! Singature verified with body payload',
+    user: req.user.uuid,
+    token: req.user.auth_token
+  })
+}
+
 module.exports = {
-  generateCertificates
+  generateCertificates,
+  createAuthorizationToken,
+  signatureVerified
 }
